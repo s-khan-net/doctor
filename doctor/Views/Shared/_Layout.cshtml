@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="@doctor.Helpers.CultureHelper.GetCurrentNeutralCulture()" dir="@(doctor.Helpers.CultureHelper.IsRighToLeft() ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css" + (doctor.Helpers.CultureHelper.IsRighToLeft() ? "-rtl" : ""))
+    @Scripts.Render("~/bundles/modernizr")
+    @{
+        var culture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+    }
+    @helper selected(string c, string culture)
+    {
+        if (c == culture)
+        {
+            @:selected="selected"
+        }
+    }
+</head>
+<body>
+    <div class="row">
+        <div class="col-xs-12">
+            
+            <div class="row">
+                <input type="hidden" value="@Url.Action("SetCulture", "Home")" id="hidSetCulture" />
+                <div class="col-xs-1"></div>
+                <div class="col-xs-7 text-right">
+                    @Resources.ChooseYourLanguage:
+                </div>
+                <div class="col-xs-2 text-left">
+                    <select>
+                        <option value="en-us" @selected("en-us", culture)>English</option>
+                        <option value="es" @selected("es", culture)>Español</option>
+                        <option value="fr-FR" @selected("fr-fr", culture)>français</option>
+                        <option value="ar" @selected("ar", culture)>العربية</option>
+                    </select>
+                </div>
+                <div class="col-xs-2"></div>
+            </div>
+        </div>
+        <div class="col-md-offset-2 col-md-8 text-center">
+            <div class="navbar navbar-default">
+                <div class="container-fluid nav-bar">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <div class="nav-brand doc" >@Resources.AppName</div>
+                        @*@Html.ActionLink(Resources.AppName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                    </div>
+                    <div class="navbar-collapse collapse" id="mnuCollapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="menu active" href="#home">@Resources.lnkHome</a></li>
+                            <li><a class="menu" href="#about">@Resources.lnkAbout</a></li>
+                            <li><a class="menu" href="#service">@Resources.lnkServices</a></li>
+                            <li><a class="menu" href="#team">@Resources.lnkTeam</a></li>
+                            <li><a class="menu" href="#contact">@Resources.lnkContact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div >
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; <a href="http://saudkhan.net" target="_blank">Saud Khan -</a> @DateTime.Now - @Resources.AppName</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="@Url.Content("~/Content/template/js/custom.js")"></script>
+    @RenderSection("scripts", required: false)
+   
+    <script type="text/javascript">
+        (function ($) {
+            $("select").on('change', function () {
+                var u = $('#hidSetCulture').val();
+                $.post(u+'?culture=' + this.value, function () {
+                    console.log('set ');
+                    window.location.reload(true);
+                });
+            });
+
+
+        })(jQuery);
+    </script>
+</body>
+
+
+
+</html>
